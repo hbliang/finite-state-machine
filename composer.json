@@ -19,6 +19,7 @@
         }
     },
     "require": {
+        "php": ">=7.1.0",
         "phpunit/phpunit": "^7.5",
         "symfony/event-dispatcher": "^4.2",
         "symfony/stopwatch": "^4.2"
