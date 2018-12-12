@@ -1,0 +1,26 @@
+{
+    "name": "hbliang/finite-state-machine",
+    "description": "A Simple PHP Finite State Machine",
+    "type": "library",
+    "authors": [
+        {
+            "name": "hbliang",
+            "email": "ishaobinliang@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Hbliang\\FiniteStateMachine\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hbliang\\FiniteStateMachine\\Test\\": "tests/"
+        }
+    },
+    "require": {
+        "phpunit/phpunit": "^7.5",
+        "symfony/event-dispatcher": "^4.2",
+        "symfony/stopwatch": "^4.2"
+    }
+}
