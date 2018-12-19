@@ -4,7 +4,6 @@
 namespace Hbliang\FiniteStateMachine;
 
 
-use Hbliang\FiniteStateMachine\Contracts\TransitionListenerInterface;
 use Hbliang\FiniteStateMachine\Contracts\StateInterface;
 use Hbliang\FiniteStateMachine\Contracts\StateMachineInterface;
 use Hbliang\FiniteStateMachine\Contracts\TransitionInterface;
@@ -85,11 +84,11 @@ class StateMachine implements StateMachineInterface
         }
 
         if ($listener = $transition->getBeforeTransitionListener()) {
-            $this->dispatcher->addListener($transition->getBeforeTransitionEventName(), [$listener, 'handle']);
+            $this->dispatcher->addListener($transition->getBeforeTransitionEventName(), is_callable($listener) ? $listener : [new $listener, 'handle']);
         }
 
         if ($listener = $transition->getAfterTransitionListener()) {
-            $this->dispatcher->addListener($transition->getAfterTransitionEventName(), [$listener, 'handle']);
+            $this->dispatcher->addListener($transition->getAfterTransitionEventName(), is_callable($listener) ? $listener : [new $listener, 'handle']);
         }
 
         return $this;
@@ -171,7 +170,7 @@ class StateMachine implements StateMachineInterface
         }
 
         $this->currentState = $state;
-        $this->stateHandler && call_user_func($this->stateHandler, $this->host);
+        $this->stateHandler && call_user_func_array($this->stateHandler, [$this->host, $state]);
 
         return $this;
     }

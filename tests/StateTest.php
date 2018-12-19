@@ -22,6 +22,8 @@ class StateTest extends TestCase
         $state->addTransition($transition);
 
         $this->assertEquals($transition, $state->getTransitions()['ship']);
+
+
     }
 
     public function testCan()

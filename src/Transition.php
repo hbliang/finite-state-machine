@@ -29,16 +29,16 @@ class Transition implements TransitionInterface
     public function __construct($name, $from, $to, $listeners = [])
     {
         $this->name = $name;
-        $this->from = $from;
+        $this->from = is_array($from) ? $from : [$from];
         $this->to = $to;
         $this->listeners = $listeners;
 
 
-        if (isset($this->listeners['before']) && !in_array(TransitionListenerInterface::class, class_implements($this->listeners['before']))) {
+        if (isset($this->listeners['before']) && !is_callable($this->listeners['before']) && !in_array(TransitionListenerInterface::class, class_implements($this->listeners['before']))) {
             throw new \UnexpectedValueException("Transition before listener {$this->name} must implements TransitionListenerInterface");
         }
 
-        if (isset($this->listeners['after']) && !in_array(TransitionListenerInterface::class, class_implements($this->listeners['after']))) {
+        if (isset($this->listeners['after']) && !is_callable($this->listeners['after']) && !in_array(TransitionListenerInterface::class, class_implements($this->listeners['after']))) {
             throw new \UnexpectedValueException("Transition after listener {$this->name} must implements TransitionListenerInterface");
         }
     }

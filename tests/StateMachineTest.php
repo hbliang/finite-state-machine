@@ -11,6 +11,7 @@ use Hbliang\FiniteStateMachine\State;
 use Hbliang\FiniteStateMachine\StateMachine;
 use Hbliang\FiniteStateMachine\Transition;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Test;
 use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -35,14 +36,27 @@ class StateMachineTest extends TestCase
 
     public function testAddTransition()
     {
+        $listener = $this->createMock(TransitionListenerInterface::class);
         $state = new State('created');
-        $transition = new Transition('process', ['created'], 'processed');
-        $stateMachine = new StateMachine(null, new EventDispatcher());
+        $closure = function () {
+
+        };
+        $transition = new Transition('process', ['created'], 'processed', [
+            'before' => $listener,
+            'after' => $closure,
+        ]);
+
+        $eventDispatcher = new EventDispatcher();
+        $stateMachine = new StateMachine(null, $eventDispatcher);
         $stateMachine->addState($state);
         $stateMachine->addTransition($transition);
 
         $this->assertEquals($transition, $stateMachine->getTransitions()['process']);
         $this->assertEquals($transition, $state->getTransitions()['process']);
+
+
+        $this->assertTrue($eventDispatcher->hasListeners($transition->getBeforeTransitionEventName()));
+        $this->assertTrue($eventDispatcher->hasListeners($transition->getAfterTransitionEventName()));
     }
 
     public function testCan()
@@ -105,8 +119,10 @@ class StateMachineTest extends TestCase
             ['before' => $before, 'after' => $after]
         );
         $stateMachine->addTransition($transition);
-        $stateMachine->addListener(TransitionEvent::PRE_TRANSITION, function() {});
-        $stateMachine->addListener(TransitionEvent::POST_TRANSITION, function() {});
+        $stateMachine->addListener(TransitionEvent::PRE_TRANSITION, function () {
+        });
+        $stateMachine->addListener(TransitionEvent::POST_TRANSITION, function () {
+        });
         $stateMachine->initialize('created');
 
         $this->assertEquals('created', $stateMachine->getCurrentState()->getName());

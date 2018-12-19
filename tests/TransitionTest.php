@@ -37,6 +37,9 @@ class TransitionTest extends TestCase
 
         $listeners = [
             'before' => new \stdClass(),
+            'after' => function() {
+
+            },
         ];
         $transition = new Transition('process', ['created'], 'processed', $listeners);
     }
@@ -47,6 +50,9 @@ class TransitionTest extends TestCase
         $this->expectExceptionMessage("Transition after listener process must implements TransitionListenerInterface");
 
         $listeners = [
+            'before' => function() {
+
+            },
             'after' => new \stdClass(),
         ];
         $transition = new Transition('process', ['created'], 'processed', $listeners);
