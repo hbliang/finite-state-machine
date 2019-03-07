@@ -39,7 +39,7 @@ class StateMachine implements StateMachineInterface
     /**
      * @var array
      */
-    protected $states;
+    protected $states = [];
 
     /**
      * @var array
@@ -208,5 +208,17 @@ class StateMachine implements StateMachineInterface
     public function addListener($eventName, $listener, $priority = 0)
     {
         $this->dispatcher->addListener($eventName, $listener, $priority);
+    }
+
+    public function getInitialState()
+    {
+        /** @var StateInterface $state */
+        foreach ($this->states as $state) {
+            if ($state->isInitial()) {
+                return $state;
+            }
+        }
+
+        return null;
     }
 }

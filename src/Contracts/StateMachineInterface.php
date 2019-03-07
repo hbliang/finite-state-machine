@@ -46,4 +46,6 @@ interface StateMachineInterface
     public function getAvailableTransitions();
 
     public function getHost();
+
+    public function getInitialState();
 }

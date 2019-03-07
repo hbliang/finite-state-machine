@@ -11,7 +11,6 @@ use Hbliang\FiniteStateMachine\State;
 use Hbliang\FiniteStateMachine\StateMachine;
 use Hbliang\FiniteStateMachine\Transition;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Util\Test;
 use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Stopwatch\Stopwatch;

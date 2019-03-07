@@ -64,6 +64,24 @@ class State implements StateInterface
         return $this->type;
     }
 
+    public function setAsInitial()
+    {
+        $this->type = self::TYPE_INITIAL;
+        return $this;
+    }
+
+    public function setAsNormal()
+    {
+        $this->type = self::TYPE_NORMAL;
+        return $this;
+    }
+
+    public function setAsFinal()
+    {
+        $this->type = self::TYPE_FINAL;
+        return $this;
+    }
+
     /**
      * Return the available transitions
      *
@@ -88,6 +106,10 @@ class State implements StateInterface
      */
     public function can($transition)
     {
+        if ($this->isFinal()) {
+            return false;
+        }
+
         if ($transition instanceof TransitionInterface) {
             return in_array($transition, $this->transitions);
         }  elseif(is_string($transition)) {

@@ -6,9 +6,9 @@ namespace Hbliang\FiniteStateMachine\Contracts;
 
 interface StateInterface
 {
-    const TYPE_INITIAL = 'Initial';
-    const TYPE_NORMAL = 'Normal';
-    const TYPE_FINAL = 'Final';
+    const TYPE_INITIAL = 'State.Type.Initial';
+    const TYPE_NORMAL = 'State.Type.Normal';
+    const TYPE_FINAL = 'State.Type.Final';
 
     /**
      * @return string

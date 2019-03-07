@@ -26,9 +26,23 @@ trait Stateful
                 $model->{$stateName} = $state->getName();
             });
 
-            foreach ($this->getStates() as $state) {
-                $this->stateMachine->addState(new State($state));
+            $states = $this->getStates();
+
+            foreach ($states as $state => $type) {
+                $state = $state ?: $type;
+
+                if (!in_array($type , [StateInterface::TYPE_INITIAL, StateInterface::TYPE_NORMAL, StateInterface::TYPE_FINAL])) {
+                    $type = StateInterface::TYPE_NORMAL;
+                }
+
+                $this->stateMachine->addState(new State($state, $type));
             }
+
+            if (count($states) > 0 && !$this->stateMachine->getInitialState()) {
+                $state = reset($states);
+                $this->stateMachine->getState($state)->setAsInitial();
+            }
+
             foreach ($this->getTransitions() as $transitionName => $transition) {
                 $this->stateMachine->addTransition(new Transition(
                     $transitionName,
@@ -38,8 +52,11 @@ trait Stateful
                 ));
             }
 
-            // State is null while first time to use state machine
-            $this->{$stateName} && $this->stateMachine->initialize($this->{$stateName});
+            if ($this->{$stateName}) {
+                $this->stateMachine->initialize($this->{$stateName});
+            } elseif ($state = $this->stateMachine->getInitialState()) {
+                $this->stateMachine->initialize($state->getName());
+            }
         }
         return $this->stateMachine;
     }
@@ -56,6 +73,9 @@ trait Stateful
 
     public function getCurrentState()
     {
-        return $this->stateMachine()->getCurrentState()->getName();
+        if ($state = $this->stateMachine()->getCurrentState()) {
+            return $state->getName();
+        }
+        return null;
     }
 }

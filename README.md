@@ -120,6 +120,7 @@ use Hbliang\FiniteStateMachine\Contracts\TransitionListenerInterface;
 use Hbliang\FiniteStateMachine\Event\TransitionEvent;
 use Hbliang\FiniteStateMachine\Laravel\Stateful;
 use Hbliang\FiniteStateMachine\Laravel\StatefulInterface;
+use Hbliang\FiniteStateMachine\Contracts\StateInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model implements StatefulInterface
@@ -129,20 +130,31 @@ class Order extends Model implements StatefulInterface
     protected $fillable = ['state'];
 
     /**
+     * The state of which you don't declare type explicitly will be seen as normal state.
+     * If there is not explicitly declared initial state, 
+     * state machine will take the first state of list as initial state.
+     *   
      * @return array
      */
     public function getStates()
     {
         return [
-            'created',
+            'created' => StateInterface::TYPE_INITIAL,
             'paid',
-            'processed',
-            'cancelled',
+            'done',
+            'cancelled' => StateInterface::TYPE_FINAL,
             'shipped',
-            'delivered',
-            'completed',
-            'refunded',
         ];
+        
+        /**
+         return [
+            'created', // initial state set by state machine automatically 
+            'paid',
+            'done',
+            'cancelled' => StateInterface::TYPE_FINAL,
+            'shipped',
+         ];
+        */
     }
 
     /**
