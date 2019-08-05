@@ -47,6 +47,39 @@ class StatefulTest extends TestCase
         $this->assertTrue($stateMachine->getCurrentState()->isFinal());
     }
 
+    public function testStateMachine1()
+    {
+        $mock = $this->getMockForAbstractClass(StatefulForTest::class);
+        $mock->state = null;
+
+        $mock->expects($this->once())
+            ->method('getStatePropertyName')
+            ->willReturn('state');
+
+        $mock->expects($this->once())
+            ->method('getStates')
+            ->willReturn(['created', 'processed', 'done' => StateInterface::TYPE_FINAL]);
+
+        $mock->expects($this->once())
+            ->method('getTransitions')
+            ->willReturn([
+                'process' => [
+                    'from' => ['created'],
+                    'to' => 'processed',
+                ]
+            ]);
+
+        $stateMachine = $mock->stateMachine();
+
+        $this->assertInstanceOf(StateMachine::class, $stateMachine);
+
+        $this->assertEquals('created', $mock->getCurrentState());
+
+        $stateMachine->apply('process');
+
+        $this->assertEquals('processed', $stateMachine->getCurrentState()->getName());
+    }
+
     public function testInitialStateStateMachine()
     {
         $mock = $this->getMockForAbstractClass(StatefulForTest::class);

@@ -29,9 +29,8 @@ trait Stateful
             $states = $this->getStates();
 
             foreach ($states as $state => $type) {
-                $state = $state ?: $type;
-
                 if (!in_array($type , [StateInterface::TYPE_INITIAL, StateInterface::TYPE_NORMAL, StateInterface::TYPE_FINAL])) {
+                    $state = $type;
                     $type = StateInterface::TYPE_NORMAL;
                 }
 
