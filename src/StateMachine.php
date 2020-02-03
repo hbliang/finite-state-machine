@@ -127,13 +127,13 @@ class StateMachine implements StateMachineInterface
 
         $transitionEvent = new TransitionEvent($transition, $this->currentState, $this);
 
-        $this->dispatcher->dispatch(TransitionEvent::PRE_TRANSITION, $transitionEvent);
-        $this->dispatcher->dispatch($transition->getBeforeTransitionEventName(), $transitionEvent);
+        $this->dispatcher->dispatch($transitionEvent, TransitionEvent::PRE_TRANSITION);
+        $this->dispatcher->dispatch($transitionEvent, $transition->getBeforeTransitionEventName());
 
         $this->setCurrentState($transition->getToState());
 
-        $this->dispatcher->dispatch($transition->getAfterTransitionEventName(), $transitionEvent);
-        $this->dispatcher->dispatch(TransitionEvent::POST_TRANSITION, $transitionEvent);
+        $this->dispatcher->dispatch($transitionEvent, $transition->getAfterTransitionEventName());
+        $this->dispatcher->dispatch($transitionEvent, TransitionEvent::POST_TRANSITION);
 
     }
 

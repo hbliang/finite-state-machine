@@ -20,7 +20,7 @@
     },
     "require": {
         "php": ">=7.1.0",
-        "symfony/event-dispatcher": "^4.2",
+        "symfony/event-dispatcher": "^4.3",
         "symfony/stopwatch": "^4.2",
         "illuminate/support": "^5.7",
         "Illuminate/database": "^5.7"
